@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.example</groupId>
+  <groupId>org.psyncopate</groupId>
   <artifactId>flink-tutorial</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.1-SNAPSHOT</version>
   <build>
+    <extensions>
+      <extension>
+        <groupId>com.google.cloud.artifactregistry</groupId>
+        <artifactId>artifactregistry-maven-wagon</artifactId>
+        <version>2.2.0</version>
+      </extension>
+    </extensions>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -44,7 +51,7 @@
               </filters>
               <transformers>
                 <transformer>
-                  <mainClass>dataset.DatasetExample</mainClass>
+                  <mainClass>org.psyncopate.flink.dataset.DatasetExample</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -53,11 +60,19 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+    <repository>
+      <releases />
+      <snapshots />
+      <id>artifact-registry</id>
+      <url>artifactregistry://us-central1-maven.pkg.dev/playground-s-11-3cf2657b/flink</url>
+    </repository>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-streaming-java</artifactId>
-      <version>1.19.1</version>
+      <version>1.17.0</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -68,16 +83,42 @@
           <artifactId>flink-runtime</artifactId>
           <groupId>org.apache.flink</groupId>
         </exclusion>
-        <exclusion>
-          <artifactId>flink-connector-datagen</artifactId>
-          <groupId>org.apache.flink</groupId>
-        </exclusion>
       </exclusions>
     </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>2.17.1</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.17.1</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.17.1</version>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
+  <distributionManagement>
+    <repository>
+      <id>artifact-registry</id>
+      <url>artifactregistry://us-central1-maven.pkg.dev/playground-s-11-3cf2657b/flink</url>
+    </repository>
+    <snapshotRepository>
+      <id>artifact-registry</id>
+      <url>artifactregistry://us-central1-maven.pkg.dev/playground-s-11-3cf2657b/flink</url>
+    </snapshotRepository>
+  </distributionManagement>
   <properties>
     <java.version>11</java.version>
-    <flink.version>1.19.1</flink.version>
+    <log4j.version>2.17.1</log4j.version>
+    <flink.version>1.17.0</flink.version>
+    <kafka.version>3.2.2</kafka.version>
   </properties>
 </project>
 
