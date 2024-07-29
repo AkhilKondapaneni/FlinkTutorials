@@ -60,8 +60,31 @@
             <version>${log4j.version}</version>
             <scope>runtime</scope>
         </dependency>
-
-
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-kafka</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-json</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>1.11.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-json-serializer</artifactId>
+            <version>3.2.2</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -108,7 +131,7 @@
                             </filters>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>org.psyncopate.flink.dataset.DatasetExample</mainClass>
+                                    <mainClass>org.psyncopate.flink.streaming.FleetDataStreamJob</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
@@ -116,36 +139,27 @@
                 </executions>
             </plugin>
         </plugins>
-        <extensions>
-            <extension>
-                <groupId>com.google.cloud.artifactregistry</groupId>
-                <artifactId>artifactregistry-maven-wagon</artifactId>
-                <version>2.2.0</version>
-            </extension>
-        </extensions>
     </build>
-
-<distributionManagement>
-    <snapshotRepository>
-        <id>artifact-registry</id>
-        <url>artifactregistry://us-central1-maven.pkg.dev/playground-s-11-3cf2657b/flink</url>
-    </snapshotRepository>
-    <repository>
-        <id>artifact-registry</id>
-        <url>artifactregistry://us-central1-maven.pkg.dev/playground-s-11-3cf2657b/flink</url>
-    </repository>
-</distributionManagement>
-
-<repositories>
-    <repository>
-        <id>artifact-registry</id>
-        <url>artifactregistry://us-central1-maven.pkg.dev/playground-s-11-3cf2657b/flink</url>
-        <releases>
-            <enabled>true</enabled>
-        </releases>
-        <snapshots>
-            <enabled>true</enabled>
-        </snapshots>
-    </repository>
-</repositories>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
