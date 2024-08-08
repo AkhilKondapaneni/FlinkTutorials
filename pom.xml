@@ -85,6 +85,12 @@
             <artifactId>kafka-json-serializer</artifactId>
             <version>3.2.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -131,7 +137,7 @@
                             </filters>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>org.psyncopate.flink.streaming.FleetDataStreamJob</mainClass>
+                                    <mainClass>org.psyncopate.flink.stateful.operations.StatefulTransactionJob</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

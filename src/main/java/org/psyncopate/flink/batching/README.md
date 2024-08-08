@@ -80,7 +80,7 @@ Configures a Kafka sink and writes the processed data to a Kafka topic.
 **Purpose:** Adds the prefix "Processed: " to each data entry. This transformation is useful for tagging or annotating data.
 Filter Transformation:
 
-**Operation: result.filter(value -> value.contains("Active: true"))** 
+**Operation: result.filter(value -> value.contains("Active: true"))**
 
 **Purpose**: Filters out entries that do not contain "Active: true". This is used to focus on only those records that meet a specific condition (e.g., active users).
 KeyBy Transformation:
