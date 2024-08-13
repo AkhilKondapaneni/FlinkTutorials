@@ -41,6 +41,22 @@ mvn clean package
 
 ## Configure Kafka
 
+
+Create a datagen source connector that will pump data into a source topic. Use the following config for spinning up the connector
+
+```json
+{
+  "name": "StateJob_Connector",
+  "config": {
+    "connector.class": "io.confluent.kafka.connect.datagen.DatagenConnector",
+    "tasks.max": "2",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "kafka.topic": "<REPLACE_WITH_TOPIC>",
+    "quickstart": "transactions"
+  }
+}
+```
+
 Create `kafka-consumer-stateful-operations.properties` and `kafka-producer-stateful-operations.properties` files in the `src/main/resources` directory with the following properties:
 
 ### kafka-consumer-stateful-operations.properties

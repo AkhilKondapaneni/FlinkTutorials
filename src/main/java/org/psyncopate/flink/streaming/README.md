@@ -41,7 +41,23 @@ mvn clean package
 
 ## Configure Kafka
 
+Create a datagen source connector that will pump data into a source topic. Use the following config for spinning up the connector
+
+```json
+{
+  "name": "StreamingJob_Connector",
+  "config": {
+    "connector.class": "io.confluent.kafka.connect.datagen.DatagenConnector",
+    "tasks.max": "2",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "kafka.topic": "<REPLACE_WITH_TOPIC>",
+    "quickstart": "fleet_mgmt_sensors"
+  }
+}
+```
+
 Create `kafka-consumer-streaming.properties` and `kafka-producer-streaming.properties` files in the `src/main/resources` directory with the following properties:
+
 
 ### kafka-consumer.properties
 
