@@ -37,7 +37,7 @@ Navigate to the directory containing `docker-compose.yml` and start the services
 
 ```bash
 cd /src/main/resources
-docker-compose up -d
+docker compose up -d
 ```
 
 This command will start all the defined services, including Kafka, Schema Registry, Control Center, ksqlDB, and Flink.
