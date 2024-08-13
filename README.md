@@ -1,97 +1,87 @@
-# DataStreamBatchExample
 
-This project demonstrates a basic Apache Flink job for batch processing. The job reads data from a local collection, processes it, and writes the results to a Kafka topic.
+# Kafka and Flink Infrastructure Setup
 
-## Overview
+This document outlines the steps to set up a Kafka and Flink infrastructure using Docker Compose. The setup includes Kafka, Schema Registry, Kafka Connect, Control Center, ksqlDB, Flink, and other related services.
 
-The `DataStreamBatchExample` class showcases how to:
-- Set up a Flink `StreamExecutionEnvironment` in batch mode.
-- Generate a sample dataset for processing.
-- Apply basic transformations to the dataset.
-- Write the processed data to a Kafka topic using a Kafka sink.
+## Prerequisites
 
-## Features
+- **Docker**: Ensure Docker is installed and running on your machine.
+- **Docker Compose**: Ensure Docker Compose is installed.
 
-- **Batch Processing**: Configures Flink to run in batch mode.
-- **Data Generation**: Creates a sample dataset with 10,000 entries.
-- **Transformations**: Applies map, filter, and reduce transformations.
-- **Kafka Sink**: Sends processed data to a Kafka topic.
+## Setup Instructions
 
-## Requirements
+### 1. Clone the Repository
 
-- Apache Flink (compatible with the version used in this project)
-- Apache Kafka
-- Java 11 or higher
-
-## Setup
-
-**Clone the Repository**
-
-   ```bash
-   git clone <repository-url>
-   cd <repository-directory>
-   ```
-
-## Build
+First, clone the repository where the Docker Compose file is located:
 
 ```bash
-mvn clean package
+git clone <repository-url>
+cd <repository-directory>
 ```
-## Configure Kafka
 
-Create  kafka-producer/consumer.properties files in the src/main/resources directory with the following properties:
-``` properties
-bootstrap.servers=<your-kafka-bootstrap-servers>
-topic=<your-kafka-topic>
-```
-Replace <your-kafka-bootstrap-servers> with your Kafka brokers' addresses and <your-kafka-topic> with the target Kafka topic
+### 2. Prepare Docker Compose Configuration
 
-## Running the Job
+Ensure that the `docker-compose.yml` file is placed in the `src/main/resources` directory. This file contains configurations for all the necessary services:
 
-Execute the Flink job using the following command:
+- **Kafka Broker**
+- **Schema Registry**
+- **Kafka Connect**
+- **Control Center**
+- **ksqlDB Server and CLI**
+- **Kafka REST Proxy**
+- **Flink SQL Client and Job Manager/Task Manager**
+
+### 3. Start the Docker Containers
+
+Navigate to the directory containing `docker-compose.yml` and start the services:
+
 ```bash
-flink run -c org.psyncopate.flink.batching.DataStreamBatchExample target/flink-tutorial-1.1-<version>.jar
-
-```
-## Code Overview
-
-**DataStreamBatchExample**: Main class to run the Flink job.
-main method:
-Sets up the Flink execution environment in batch mode.
-
-Loads Kafka producer properties from an external file.
-Generates a sample dataset with 10,000 entries.
-
-**Applies transformations:**
-
-**Map Transformation:** Prepends "Processed: " to each entry.
-**Filter Transformation**: Keeps only entries that contain "Active: true".
-**KeyBy Transformation**: Groups entries by user ID (extracted from the entry).
-**Reduce Transformation**: Aggregates entries by concatenating them with "; ".
-Configures a Kafka sink and writes the processed data to a Kafka topic.
-
-**generateUserData method**: Generates random user data for the dataset.
-
-## Data Transformations Explained
-### Map Transformation:
-
-**Operation: text.map(value -> "Processed: " + value)**
-
-**Purpose:** Adds the prefix "Processed: " to each data entry. This transformation is useful for tagging or annotating data.
-Filter Transformation:
-
-**Operation: result.filter(value -> value.contains("Active: true"))** 
-
-**Purpose**: Filters out entries that do not contain "Active: true". This is used to focus on only those records that meet a specific condition (e.g., active users).
-KeyBy Transformation:
-
-**Operation: result.keyBy(value -> value.split(",")[0])**
-
-**Purpose**: Groups data entries by user ID, which is extracted from the entry. This ensures that subsequent operations are performed within each user group.
-Reduce Transformation:
-
-**Operation: result.reduce((value1, value2) -> value1 + "; " + value2)**
-
-**Purpose**: Concatenates all entries for each user ID, separated by "; ". This is useful for aggregating or combining related records.
+cd /src/main/resources
+docker-compose up -d
 ```
 
+This command will start all the defined services, including Kafka, Schema Registry, Control Center, ksqlDB, and Flink.
+
+### 4. Verify the Setup
+
+Once the containers are up and running, verify the services by accessing the following endpoints:
+
+- **Kafka Broker**: [http://localhost:9092](http://localhost:9092)
+- **Schema Registry**: [http://localhost:8081](http://localhost:8081)
+- **Kafka Connect**: [http://localhost:8083](http://localhost:8083)
+- **Control Center**: [http://localhost:9021](http://localhost:9021)
+- **ksqlDB Server**: [http://localhost:8088](http://localhost:8088)
+- **Kafka REST Proxy**: [http://localhost:8082](http://localhost:8082)
+- **Flink SQL Client**: [http://localhost:8081](http://localhost:8081) (via Docker exec -it shell)
+- **Flink JobManager**: [http://localhost:9081](http://localhost:9081)
+
+### 5. Run Flink Jobs
+To submit Flink jobs, use the Flink job manager url: [http://localhost:9081](http://localhost:9081)
+
+To run FlinkSQL jobs, use the `flink-sql-client` container. You can interact with it via:
+
+```bash
+docker exec -it flink-sql-client /bin/sh
+```
+
+From within the container, you can execute SQL queries or submit jobs.
+
+### 6. Stopping the Services
+
+To stop the Docker containers, run:
+
+```bash
+docker compose down
+```
+
+This command will stop and remove all containers defined in the Docker Compose file.
+
+## Troubleshooting
+
+- **Containers Not Starting**: Check logs for individual services using `docker logs <container-name>`.
+- **Network Issues**: Ensure Docker network settings are correctly configured.
+- **Port Conflicts**: Ensure the ports used in `docker-compose.yml` are not conflicting with other services on your machine.
+
+## License
+
+This setup is provided for educational and development purposes. Refer to the Docker, Confluent Kafka, and Flink documentation for licensing and usage terms.
