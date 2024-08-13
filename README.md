@@ -29,7 +29,7 @@ Ensure that the `docker-compose.yml` file is placed in the `src/main/resources` 
 - **Control Center**
 - **ksqlDB Server and CLI**
 - **Kafka REST Proxy**
-- **Flink SQL Client and Job Manager/Task Manager**
+- **Flink SQL Client, Job Manager, and Task Manager**
 
 ### 3. Start the Docker Containers
 
