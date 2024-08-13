@@ -42,8 +42,10 @@ Place the `f1_lap_times.csv` file in the `src/main/resources` directory. The CSV
 
 ```
 driver_id,driver_name,team_name,lap_time
-1,Driver1,TeamA,85.5
-2,Driver2,TeamB,90.0
+44,Lewis Hamilton,Mercedes,88.5
+33,Max Verstappen,Red Bull,89.1
+16,Charles Leclerc,Ferrari,87.3
+11,Sergio Perez,Red Bull,90.0
 ...
 ```
 
