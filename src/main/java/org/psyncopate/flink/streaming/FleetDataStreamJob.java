@@ -8,17 +8,13 @@ import org.apache.flink.connector.kafka.sink.KafkaSink;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.formats.json.JsonDeserializationSchema;
-import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.DeserializationFeature;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.SerializationFeature;
-import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.psyncopate.flink.streaming.pojo.FleetSensorData;
-import org.apache.flink.formats.json.JsonSerializationSchema;
 
-import java.io.DataInput;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -38,7 +34,7 @@ public class FleetDataStreamJob {
 
     public void execute() throws Exception {
         // Load properties
-        Properties consumerProps = loadProperties("kafka-consumer.properties");
+        Properties consumerProps = loadProperties("kafka-consumer-streaming.properties");
         Properties producerProps = loadProperties("kafka-producer-streaming.properties");
 
         // Configuration

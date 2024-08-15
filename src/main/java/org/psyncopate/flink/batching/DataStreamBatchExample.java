@@ -38,9 +38,8 @@ public class DataStreamBatchExample {
         // Apply transformations
         DataStream<String> result = text
                 .map(value -> "Processed: " + value) // Simple transformation
-                .filter(value -> value.contains("Active: true")) // Filtering active users
-                .keyBy(value -> value.split(",")[0]) // Key by user ID
-                .reduce((value1, value2) -> value1 + "; " + value2); // Aggregation
+                .filter(value -> value.contains("Active: true")); // Filtering active users
+
 
         // Create Kafka sink
         KafkaSink<String> kafkaSink = KafkaSink.<String>builder()
