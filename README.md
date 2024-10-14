@@ -61,7 +61,7 @@ Once the containers are up and running, verify the services by accessing the fol
 - **Control Center**: [http://localhost:9021](http://localhost:9021)
 - **ksqlDB Server**: [http://localhost:8088](http://localhost:8088)
 - **Kafka REST Proxy**: [http://localhost:8082](http://localhost:8082)
-- **Flink SQL Client**: [http://localhost:8081](http://localhost:8081) (via Docker exec -it shell)
+- **Flink SQL Client**: via Docker exec -it sql-client.sh shell
 - **Flink JobManager**: [http://localhost:9081](http://localhost:9081)
 
 ### 5. Run Flink Jobs
