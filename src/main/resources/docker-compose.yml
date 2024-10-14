@@ -1,5 +1,8 @@
 ---
 version: '2'
+networks:
+  flink-network:
+    driver: bridge
 services:
 
   broker:
@@ -185,11 +188,15 @@ services:
     ports:
       - 9081:9081
     command: jobmanager
+    networks:
+      - flink-network
     environment:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: flink-jobmanager
         rest.bind-port: 9081
+    volumes:
+      - ./jobs:/opt/flink/jobs
 
   flink-taskmanager:
     image: cnfldemos/flink-kafka:1.16.0-scala_2.12-java11
@@ -199,8 +206,26 @@ services:
       - flink-jobmanager
     command: taskmanager
     scale: 1
+    networks:
+      - flink-network
     environment:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: flink-jobmanager
         taskmanager.numberOfTaskSlots: 10
+    volumes:
+      - ./jobs:/opt/flink/jobs
+  mongo:
+    container_name: container-mongodb
+    image: mongo:latest
+    restart: always
+    ports:
+      - 27017:27017
+    networks:
+      - flink-network
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: root-db
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro

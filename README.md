@@ -42,6 +42,15 @@ docker compose up -d
 
 This command will start all the defined services, including Kafka, Schema Registry, Control Center, ksqlDB, and Flink.
 
+### Setting up the Mongo Database in local
+
+```bash
+brew install mongosh
+mongosh "mongodb://localhost:27017/api_dev_db" --username api_user --password api1234 --authenticationDatabase api_dev_db
+# View all collections
+show collections;
+```
+
 ### 4. Verify the Setup
 
 Once the containers are up and running, verify the services by accessing the following endpoints:
