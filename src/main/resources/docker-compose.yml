@@ -200,6 +200,7 @@ services:
       - ./jobs:/opt/flink/jobs
       - ./flink-checkpoints:/opt/flink/checkpoints # Mount for checkpoints
       - ./flink-savepoints:/opt/flink/savepoints # Mount for savepoints
+      - ../../../target:/opt/flink/jars #Mount for packaged jar
 
   flink-taskmanager:
     image: cnfldemos/flink-kafka:1.16.0-scala_2.12-java11
@@ -220,6 +221,7 @@ services:
       - ./jobs:/opt/flink/jobs
       - ./flink-checkpoints:/opt/flink/checkpoints # Mount for checkpoints
       - ./flink-savepoints:/opt/flink/savepoints # Mount for savepoints
+      -  ../../../target:/opt/flink/jars #Mount for packaged jar
   mongo:
     container_name: container-mongodb
     image: mongo:latest
