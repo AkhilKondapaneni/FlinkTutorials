@@ -94,7 +94,7 @@ The job generates a stream of numbers, processes them to calculate a running sum
    - The processed results are written to a text file (`output/sum_results.txt`) in overwrite mode.
 
 6. **Execution**:
-   - The job is executed with `env.execute("Fault Tolerant Zero Generator with Final 1000")`.
+   - The job is executed with `env.execute("Fault Tolerance Demo")`.
 
 ## Demonstration
 

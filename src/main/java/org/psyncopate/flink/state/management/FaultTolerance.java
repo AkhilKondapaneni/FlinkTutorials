@@ -60,7 +60,7 @@ public class FaultTolerance {
             outputStream.writeAsText("output/sum_results.txt", FileSystem.WriteMode.OVERWRITE);  // Write to a text file in overwrite mode
 
             // Execute the Flink job
-            env.execute("Fault Tolerant Zero Generator with Final 1000");
+            env.execute("Fault Tolerance Demo");
         } catch (Exception e) {
             logger.error("Error executing Flink job", e);
         }
