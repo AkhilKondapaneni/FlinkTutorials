@@ -7,48 +7,62 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FaultTolerance {
-    public static void main(String[] args) throws Exception {
-        // Create the execution environment
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+    private static final Logger logger = LoggerFactory.getLogger(FaultTolerance.class);
 
-        // Set parallelism to 1 to write to a single output file
-        env.setParallelism(1);
+    public static void main(String[] args) {
+        try {
+            // Create the execution environment
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        // Enable checkpointing for fault tolerance
-        env.enableCheckpointing(1000, CheckpointingMode.EXACTLY_ONCE);
+            // Set parallelism to 1 to write to a single output file
+            env.setParallelism(1);
 
-        // Set the state backend to RocksDB if needed (optional)
-        env.setStateBackend(new RocksDBStateBackend("file:///opt/flink/checkpoints"));
+            // Enable checkpointing for fault tolerance
+            env.enableCheckpointing(1000, CheckpointingMode.EXACTLY_ONCE);
 
-        // Define a directory for savepoints
-        String savepointPath = "file:///opt/flink/savepoints";
+            // Set the state backend to RocksDB if needed (optional)
+            env.setStateBackend(new RocksDBStateBackend("file:///opt/flink/checkpoints"));
 
-        // Create a data stream of 2 million zeros followed by a single 1000
-        DataStream<Integer> numberStream = env
-                .fromSequence(0, 2_0_000)  // Generates numbers from 0 to 20,000
-                .map(i -> (i < 2_0_000) ? 0 : 990);  // Emit 0s, then a final 990
+            // Define a directory for savepoints
+            String savepointPath = "file:///opt/flink/savepoints";
 
-        // Process the stream to calculate the running sum with delay
-        DataStream<String> outputStream = numberStream
-                .keyBy(num -> 0)  // Use constant key for keyed state
-                .process(new KeyedProcessFunction<Integer, Integer, String>() {
-                    private int sum = 10;  // Maintain running sum
+            // Create a data stream of 20,000 zeros followed by a single 1000
+            DataStream<Integer> numberStream = env
+                    .fromSequence(0, 20_000)  // Generates numbers from 0 to 20,000
+                    .map(i -> (i < 20_000) ? 0 : 990);  // Emit 0s, then a final 1000
 
-                    @Override
-                    public void processElement(Integer value, Context ctx, Collector<String> out) throws InterruptedException {
-                        // Introduce a delay to simulate backpressure
-                        Thread.sleep(1);  // Delay for 1 millisecond
+            // Process the stream to calculate the running sum with delay
+            DataStream<String> outputStream = numberStream
+                    .keyBy(num -> 0)  // Use constant key for keyed state
+                    .process(new KeyedProcessFunction<Integer, Integer, String>() {
+                        private int sum = 10;  // Maintain running sum
 
-                        sum += value;  // Update sum
-                        out.collect("Current sum: " + sum);  // Output current sum
-                    }
-                });
+                        @Override
+                        public void processElement(Integer value, Context ctx, Collector<String> out) {
+                            try {
+                                // Introduce a delay to simulate backpressure
+                                Thread.sleep(1);  // Delay for 1 millisecond
 
-        // Write the output to a text file, allowing overwriting
-        outputStream.writeAsText("output/sum_results.txt", FileSystem.WriteMode.OVERWRITE);  // Write to a text file in overwrite mode
-        // Execute the Flink job
-        env.execute("Fault Tolerant Zero Generator with Final 1000");
+                                sum += value;  // Update sum
+                                out.collect("Current sum: " + sum);  // Output current sum
+                            } catch (InterruptedException e) {
+                                logger.error("Error processing element", e);
+                                Thread.currentThread().interrupt();
+                            }
+                        }
+                    });
+
+            // Write the output to a text file, allowing overwriting
+            outputStream.writeAsText("output/sum_results.txt", FileSystem.WriteMode.OVERWRITE);  // Write to a text file in overwrite mode
+
+            // Execute the Flink job
+            env.execute("Fault Tolerant Zero Generator with Final 1000");
+        } catch (Exception e) {
+            logger.error("Error executing Flink job", e);
+        }
     }
 }
