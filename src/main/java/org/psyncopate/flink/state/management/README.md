@@ -29,7 +29,7 @@ This project demonstrates a simple Apache Flink job that implements fault tolera
 
 3. **Start the required services** using Docker Compose:
     ```sh
-    docker-compose up -d
+    docker compose up -d
     ```
 
 ## Running the Job
@@ -108,12 +108,12 @@ The job generates a stream of numbers, processes them to calculate a running sum
 
 2. **Simulate a fault by killing the Task Manager container**:
     ```sh
-    docker-compose stop taskmanager
+    docker compose stop taskmanager
     ```
 
 3. **Restart the Task Manager container**:
     ```sh
-    docker-compose start taskmanager
+    docker compose start taskmanager
     ```
 
 The job will recover from the last checkpoint and continue processing.
