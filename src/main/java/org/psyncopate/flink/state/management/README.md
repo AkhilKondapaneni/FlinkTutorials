@@ -22,9 +22,9 @@ This project demonstrates a simple Apache Flink job that implements fault tolera
     cd <repository-directory>
     ```
 
-2. **Build the project**:
+2. **Build and package the project**:
     ```sh
-    mvn clean install
+    mvn package
     ```
 
 3. **Start the required services** using Docker Compose:
