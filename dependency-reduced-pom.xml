@@ -44,7 +44,7 @@
               </filters>
               <transformers>
                 <transformer>
-                  <mainClass>org.psyncopate.flink.stateful.operations.StatefulTransactionJob</mainClass>
+                  <mainClass>${mainClass}</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -94,6 +94,7 @@
     </dependency>
   </dependencies>
   <properties>
+    <mainClass>org.psyncopate.flink.state.management.FaultTolerance</mainClass>
     <java.version>11</java.version>
     <log4j.version>2.17.1</log4j.version>
     <flink.version>1.17.0</flink.version>

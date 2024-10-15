@@ -181,6 +181,7 @@ services:
     volumes:
       - ./settings/:/settings
 
+
   flink-jobmanager:
     image: cnfldemos/flink-kafka:1.16.0-scala_2.12-java11
     hostname: flink-jobmanager
@@ -197,6 +198,8 @@ services:
         rest.bind-port: 9081
     volumes:
       - ./jobs:/opt/flink/jobs
+      - ./flink-checkpoints:/opt/flink/checkpoints # Mount for checkpoints
+      - ./flink-savepoints:/opt/flink/savepoints # Mount for savepoints
 
   flink-taskmanager:
     image: cnfldemos/flink-kafka:1.16.0-scala_2.12-java11
@@ -215,6 +218,8 @@ services:
         taskmanager.numberOfTaskSlots: 10
     volumes:
       - ./jobs:/opt/flink/jobs
+      - ./flink-checkpoints:/opt/flink/checkpoints # Mount for checkpoints
+      - ./flink-savepoints:/opt/flink/savepoints # Mount for savepoints
   mongo:
     container_name: container-mongodb
     image: mongo:latest
