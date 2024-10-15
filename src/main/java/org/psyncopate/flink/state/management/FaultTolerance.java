@@ -28,13 +28,13 @@ public class FaultTolerance {
         // Create a data stream of 2 million zeros followed by a single 1000
         DataStream<Integer> numberStream = env
                 .fromSequence(0, 2_0_000)  // Generates numbers from 0 to 20,000
-                .map(i -> (i < 2_0_000) ? 0 : 1000);  // Emit 0s, then a final 1000
+                .map(i -> (i < 2_0_000) ? 0 : 990);  // Emit 0s, then a final 990
 
         // Process the stream to calculate the running sum with delay
         DataStream<String> outputStream = numberStream
                 .keyBy(num -> 0)  // Use constant key for keyed state
                 .process(new KeyedProcessFunction<Integer, Integer, String>() {
-                    private int sum = 0;  // Maintain running sum
+                    private int sum = 10;  // Maintain running sum
 
                     @Override
                     public void processElement(Integer value, Context ctx, Collector<String> out) throws InterruptedException {

@@ -10,7 +10,7 @@ This project demonstrates a simple Apache Flink job that implements fault tolera
 
 ## Prerequisites
 
-- Java 11 
+- Java 11
 - Apache Maven
 - Docker (for running the required services)
 
@@ -74,33 +74,74 @@ The job generates a stream of numbers, processes them to calculate a running sum
 ### Key Components
 
 1. **Execution Environment**:
-    - The execution environment is created using `StreamExecutionEnvironment.getExecutionEnvironment()`.
-    - Parallelism is set to 1 to ensure the output is written to a single file.
+   - The execution environment is created using `StreamExecutionEnvironment.getExecutionEnvironment()`.
+   - Parallelism is set to 1 to ensure the output is written to a single file.
 
 2. **Checkpointing**:
-    - Checkpointing is enabled with a checkpoint interval of 1000 milliseconds and `CheckpointingMode.EXACTLY_ONCE` to ensure fault tolerance.
-    - The state backend is set to RocksDB, which stores state information on disk at the specified checkpoint directory (`file:///opt/flink/checkpoints`).
+   - Checkpointing is enabled with a checkpoint interval of 1000 milliseconds and `CheckpointingMode.EXACTLY_ONCE` to ensure fault tolerance.
+   - The state backend is set to RocksDB, which stores state information on disk at the specified checkpoint directory (`file:///opt/flink/checkpoints`).
 
 3. **Data Stream**:
-    - A data stream of integers is created using `env.fromSequence(0, 20_000)`, which generates numbers from 0 to 20,000.
-    - The stream is then mapped to emit 0s for the first 20,000 elements and a final 1000.
+   - A data stream of integers is created using `env.fromSequence(0, 20,000)`, which generates numbers from 0 to 20,000.
+   - The stream is then mapped to emit 0s for the first 20,000 elements and a final 1000.
 
 4. **Processing**:
-    - The stream is keyed by a constant key (0) to use keyed state.
-    - A `KeyedProcessFunction` is used to maintain a running sum of the numbers. It introduces a delay of 1 millisecond to simulate backpressure.
-    - The current sum is output as a string.
+   - The stream is keyed by a constant key (0) to use keyed state.
+   - A `KeyedProcessFunction` is used to maintain a running sum of the numbers. It introduces a delay of 1 millisecond to simulate backpressure.
+   - The current sum is output as a string.
 
 5. **Output**:
-    - The processed results are written to a text file (`output/sum_results.txt`) in overwrite mode.
+   - The processed results are written to a text file (`output/sum_results.txt`) in overwrite mode.
 
 6. **Execution**:
-    - The job is executed with `env.execute("Fault Tolerant Zero Generator with Final 1000")`.
+   - The job is executed with `env.execute("Fault Tolerant Zero Generator with Final 1000")`.
+
+## Demonstration
+
+### Fault Tolerance with Checkpointing
+
+1. **Submit the job to the cluster**:
+    ```sh
+    docker exec -it jobmanager /bin/bash
+    flink run --detached /opt/flink/jars/flink-tutorial-1.1-SNAPSHOT.jar
+    ```
+
+2. **Simulate a fault by killing the Task Manager container**:
+    ```sh
+    docker-compose stop taskmanager
+    ```
+
+3. **Restart the Task Manager container**:
+    ```sh
+    docker-compose start taskmanager
+    ```
+
+The job will recover from the last checkpoint and continue processing.
+
+### Savepointing
+
+1. **Submit the job**:
+    ```sh
+    docker exec -it jobmanager /bin/bash
+    flink run --detached /opt/flink/jars/flink-tutorial-1.1-SNAPSHOT.jar
+    ```
+
+2. **Stop the job gracefully with a savepoint**:
+    ```sh
+    flink stop --savepointPath /opt/flink/savepoints <job-id>
+    ```
+
+3. **Resubmit the job with the savepoint location**:
+    ```sh
+    flink run -s /opt/flink/savepoints/savepoint-<savepoint-id> /opt/flink/jars/flink-tutorial-1.1-SNAPSHOT.jar
+    ```
+
+The job will resume from the savepoint and continue processing.
 
 ## License
 
-This project is licensed under a custom license. Usage is permitted only with explicit permission from Psyncopate Inc. 
-
+This project is licensed under a custom license. Usage is permitted only with explicit permission from Psyncopate Inc.
 
 ## Additional Resources
 
-For more information, refer to the official [Apache Flink documentation](https://flink.apache.org/).or more information, refer to the official [Apache Flink documentation](https://flink.apache.org/).
+For more information, refer to the official [Apache Flink documentation](https://flink.apache.org/).
