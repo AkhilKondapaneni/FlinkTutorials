@@ -197,10 +197,10 @@ services:
         jobmanager.rpc.address: flink-jobmanager
         rest.bind-port: 9081
     volumes:
-      - ./jobs:/opt/flink/jobs
       - ./flink-checkpoints:/opt/flink/checkpoints # Mount for checkpoints
       - ./flink-savepoints:/opt/flink/savepoints # Mount for savepoints
       - ../../../target:/opt/flink/jars #Mount for packaged jar
+      -  ./delta-lake:/opt/flink/delta-lake #Mount for delta lake tables
 
   flink-taskmanager:
     image: cnfldemos/flink-kafka:1.16.0-scala_2.12-java11
@@ -218,10 +218,10 @@ services:
         jobmanager.rpc.address: flink-jobmanager
         taskmanager.numberOfTaskSlots: 10
     volumes:
-      - ./jobs:/opt/flink/jobs
       - ./flink-checkpoints:/opt/flink/checkpoints # Mount for checkpoints
       - ./flink-savepoints:/opt/flink/savepoints # Mount for savepoints
       -  ../../../target:/opt/flink/jars #Mount for packaged jar
+      -  ./delta-lake:/opt/flink/delta-lake #Mount for delta lake tables
   mongo:
     container_name: container-mongodb
     image: mongo:latest

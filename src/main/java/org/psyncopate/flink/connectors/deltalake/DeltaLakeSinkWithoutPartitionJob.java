@@ -45,7 +45,7 @@ public class DeltaLakeSinkWithoutPartitionJob {
         DataStream<RowData> dataStream = env.addSource(new SampleSource(properties));
 
         // Define Delta table path
-        String deltaTablePath = "file:///" + properties.getProperty("deltaTable.path") + "_without_partition";
+        String deltaTablePath = "file:///opt/flink/delta-lake/" + properties.getProperty("deltaTable.name") + "_without_partition";
         
 
         // Define the schema for the RowData
@@ -60,7 +60,7 @@ public class DeltaLakeSinkWithoutPartitionJob {
         createDeltaSink(dataStream, deltaTablePath, rowType);
 
         // Execute the Flink job
-        env.execute("Flink Delta Lake Sink Job");
+        env.execute("Flink Delta Lake Sink Job without Partition");
     }
 
     // Function to create Delta sink for RowData
