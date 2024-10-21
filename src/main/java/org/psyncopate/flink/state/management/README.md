@@ -32,13 +32,6 @@ This project demonstrates a simple Apache Flink job that implements fault tolera
     docker compose up -d
     ```
 
-## Running the Job
-
-To run the Flink job, execute the following command:
-
-```sh
-mvn exec:java -Dexec.mainClass="org.psyncopate.flink.state.management.FaultTolerance"
-```
 
 ## Code Overview
 
@@ -51,7 +44,7 @@ The main class is located at `src/main/java/org/psyncopate/flink/state/managemen
 - **Execution Environment**: Sets up the Flink execution environment.
 - **Checkpointing**: Enables checkpointing for fault tolerance with `CheckpointingMode.EXACTLY_ONCE`.
 - **State Backend**: Optionally sets the state backend to RocksDB.
-- **Data Stream**: Generates a stream of numbers and processes them to calculate a running sum.
+- **Data Stream**: Generates a stream of numbers and processes them and prints them.
 - **Output**: Writes the processed results to a text file.
 
 ### Docker Compose
@@ -86,9 +79,7 @@ The job generates a stream of numbers, processes them to calculate a running sum
    - The stream is then mapped to emit 0s for the first 20,000 elements and a final 1000.
 
 4. **Processing**:
-   - The stream is keyed by a constant key (0) to use keyed state.
-   - A `KeyedProcessFunction` is used to maintain a running sum of the numbers. It introduces a delay of 1 millisecond to simulate backpressure.
-   - The current sum is output as a string.
+   - The stream is processed and printed to console. 
 
 5. **Output**:
    - The processed results are written to a text file (`output/sum_results.txt`) in overwrite mode.
