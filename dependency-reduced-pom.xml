@@ -94,7 +94,7 @@
     </dependency>
   </dependencies>
   <properties>
-    <mainClass>org.psyncopate.flink.state.management.FaultTolerance</mainClass>
+    <mainClass>org.psyncopate.flink.connectors.mongodb.MongoDBDataEnricherJob</mainClass>
     <java.version>11</java.version>
     <log4j.version>2.17.1</log4j.version>
     <flink.version>1.17.0</flink.version>

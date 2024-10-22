@@ -1,0 +1,12 @@
+{
+  "name": "Shoe_Orders_MongoDB_Sink",
+  "config": {
+    "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
+    "tasks.max": "4",
+    "topics": "shoes",
+    "connection.uri": "mongodb://api_user:api1234@mongo:27017/api_prod_db",
+    "database": "api_prod_db",
+    "value.converter": "io.confluent.connect.avro.AvroConverter",
+    "value.converter.schema.registry.url": "http://schema-registry:8081"
+  }
+}
