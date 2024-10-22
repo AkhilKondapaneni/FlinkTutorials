@@ -5,16 +5,13 @@ import io.delta.flink.source.DeltaSource;
 import java.util.Properties;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.state.MapState;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.configuration.CheckpointingOptions;
-import org.apache.flink.contrib.streaming.state.RocksDBStateBackend;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.environment.LocalStreamEnvironment;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.table.data.GenericRowData;
@@ -28,7 +25,7 @@ import org.psyncopate.flink.connectors.PropertyFilesLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DeltaLakeSourceJob {
+public class DeltaLakeSourceMapStateJob {
 
     public static void main(String[] args) throws Exception {
         final Logger logger = LoggerFactory.getLogger(DeltaLakeSinkWithoutPartitionJob.class);

@@ -30,7 +30,7 @@ services:
       # See https://docs.confluent.io/kafka/operations-tools/kafka-tools.html#kafka-storage-sh
       CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
     volumes:
-      - ./kafka-data:/tmp/kraft-combined-logs
+      - ../../../kafka-data:/tmp/kraft-combined-logs
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.5.0
@@ -172,7 +172,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_INITDB_DATABASE: root-db
     volumes:
-      -  ./mongo-data:/data/db
+      -  ../../../mongo-data:/data/db
       - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
   mongo-express:
     image: mongo-express:latest
