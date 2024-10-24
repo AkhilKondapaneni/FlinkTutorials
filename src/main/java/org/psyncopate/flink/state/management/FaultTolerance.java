@@ -54,17 +54,17 @@ public class FaultTolerance {
                     public void processElement(Long value, Context ctx, Collector<String> out) {
                         try {
                             // Log and output current number
-                            logger.info("Processing number: " + value);
-                            System.out.println("Processing number: " + value);
+                            logger.info("Processing record: " + value);
+                            System.out.println("Processing record: " + value);
 
                             out.collect("Processed: " + value);
 
                             // Log after processing
-                            logger.info("Processed number: " + value);
-                            System.out.println("Processed number: " + value);
+                            logger.info("Processed record: " + value);
+                            System.out.println("Processed record: " + value);
                         } catch (Exception e) {
-                            logger.error("Error processing number: " + value, e);
-                            System.err.println("Error processing number: " + value);
+                            logger.error("Error processing record: " + value, e);
+                            System.err.println("Error processing record: " + value);
                             e.printStackTrace();
                         }
                     }
