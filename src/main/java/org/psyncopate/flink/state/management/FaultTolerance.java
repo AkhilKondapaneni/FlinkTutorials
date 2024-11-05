@@ -36,7 +36,7 @@ public class FaultTolerance {
         env.enableCheckpointing(500, CheckpointingMode.EXACTLY_ONCE);  // Checkpointing every 0.5 seconds
 
         // Set the state backend to RocksDB
-        env.setStateBackend(new RocksDBStateBackend("file:///opt/flink/checkpoints"));
+        //env.setStateBackend(new RocksDBStateBackend("file:///opt/flink/checkpoints"));
 
         // Create a custom data stream source that introduces a delay between emitting numbers
         DataStream<Long> numberStream = env.addSource(new StatefulSource());
@@ -54,29 +54,29 @@ public class FaultTolerance {
                     public void processElement(Long value, Context ctx, Collector<String> out) {
                         try {
                             // Log and output current number
-                            logger.info("Processing number: " + value);
-                            System.out.println("Processing number: " + value);
+                            logger.info("Processing record: " + value);
+                            System.out.println("Processing record: " + value);
 
                             out.collect("Processed: " + value);
 
                             // Log after processing
-                            logger.info("Processed number: " + value);
-                            System.out.println("Processed number: " + value);
+                            logger.info("Processed record: " + value);
+                            System.out.println("Processed record: " + value);
                         } catch (Exception e) {
-                            logger.error("Error processing number: " + value, e);
-                            System.err.println("Error processing number: " + value);
+                            logger.error("Error processing record: " + value, e);
+                            System.err.println("Error processing record: " + value);
                             e.printStackTrace();
                         }
                     }
                 });
 
         // Add logging before writing the output
-        logger.info("Writing output to file");
-        System.out.println("Writing output to file");
+        //logger.info("Writing output to file");
+        //System.out.println("Writing output to file");
 
-        // Define the FileSink with rolling policy
+        /*// Define the FileSink with rolling policy
         final FileSink<String> sink = FileSink
-                .forRowFormat(new Path("output"), new SimpleStringEncoder<String>("UTF-8"))
+                .forRowFormat(new Path("mnt/flink/output"), new SimpleStringEncoder<String>("UTF-8"))
                 .withRollingPolicy(
                         DefaultRollingPolicy.builder()
                                 .withRolloverInterval(Duration.ofMinutes(15))
@@ -84,9 +84,9 @@ public class FaultTolerance {
                                 .withMaxPartSize(org.apache.flink.configuration.MemorySize.ofMebiBytes(1024))
                                 .build())
                 .build();
-
+*/
         // Write the output to the sink
-        outputStream.sinkTo(sink);
+        //outputStream.sinkTo(sink);
 
         // Add logging before executing the job
         logger.info("Executing Flink job");
